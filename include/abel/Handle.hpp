@@ -143,6 +143,18 @@ public:
     bool process_running() const {
         return get_exit_code_process() == STILL_ACTIVE;
     }
+
+    static OwningHandle open_process(DWORD pid, DWORD desiredAccess = PROCESS_ALL_ACCESS, bool inheritHandle = false);
+
+    void *virtual_alloc(size_t size, DWORD allocationType = MEM_COMMIT, DWORD protect = PAGE_READWRITE, void *address = nullptr);
+
+    template <typename T>
+    T *virtual_alloc(DWORD allocationType = MEM_COMMIT, DWORD protect = PAGE_READWRITE, T *address = nullptr) {
+        return (T *)virtual_alloc(sizeof(T), allocationType, protect, address);
+    }
+
+    // TODO: process_read, process_write
+
 #pragma endregion Thread
 
 #pragma region Console

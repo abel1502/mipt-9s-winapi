@@ -56,3 +56,4 @@ BinPackArguments: false
 BinPackParameters: false
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowAllArgumentsOnNextLine: true
+RequiresClausePosition: SingleLine

@@ -155,6 +155,7 @@
     <ClInclude Include="include\abel\Service.hpp" />
     <ClInclude Include="include\abel\Socket.hpp" />
     <ClInclude Include="include\abel\Thread.hpp" />
+    <ClInclude Include="RemotePtr.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
