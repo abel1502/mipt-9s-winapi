@@ -152,10 +152,10 @@
     <ClInclude Include="include\abel\Owning.hpp" />
     <ClInclude Include="include\abel\Pipe.hpp" />
     <ClInclude Include="include\abel\Process.hpp" />
+    <ClInclude Include="include\abel\RemotePtr.hpp" />
     <ClInclude Include="include\abel\Service.hpp" />
     <ClInclude Include="include\abel\Socket.hpp" />
     <ClInclude Include="include\abel\Thread.hpp" />
-    <ClInclude Include="RemotePtr.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

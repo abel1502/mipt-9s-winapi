@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <optional>
 #include <concepts>
+#include <type_traits>
 #include <memory>
 
 
@@ -22,6 +23,9 @@ class AIO;
 
 class ConsoleAsyncIO;
 class ConsoleEventPeek;
+
+template <typename T>
+class RemotePtr;
 
 // Handle is a non-owning wrapper around a WinAPI HANDLE
 class Handle : public IOBase {
@@ -146,15 +150,12 @@ public:
 
     static OwningHandle open_process(DWORD pid, DWORD desiredAccess = PROCESS_ALL_ACCESS, bool inheritHandle = false);
 
-    void *virtual_alloc(size_t size, DWORD allocationType = MEM_COMMIT, DWORD protect = PAGE_READWRITE, void *address = nullptr);
+    RemotePtr<void> virtual_alloc(size_t size, DWORD allocationType = MEM_COMMIT, DWORD protect = PAGE_READWRITE, void *address = nullptr);
 
     template <typename T>
-    T *virtual_alloc(DWORD allocationType = MEM_COMMIT, DWORD protect = PAGE_READWRITE, T *address = nullptr) {
-        return (T *)virtual_alloc(sizeof(T), allocationType, protect, address);
+    RemotePtr<T> virtual_alloc(DWORD allocationType = MEM_COMMIT, DWORD protect = PAGE_READWRITE, T *address = nullptr) {
+        return virtual_alloc(sizeof(T), allocationType, protect, address);
     }
-
-    // TODO: process_read, process_write
-
 #pragma endregion Thread
 
 #pragma region Console

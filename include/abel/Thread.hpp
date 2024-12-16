@@ -65,6 +65,14 @@ public:
             std::move(funcPtr)
         );
     }
+
+    static Thread create_remote(
+        Handle process,
+        LPTHREAD_START_ROUTINE func,
+        void *param = nullptr,
+        bool inheritHandles = false,
+        bool startSuspended = false
+    );
 };
 
 }  // namespace abel

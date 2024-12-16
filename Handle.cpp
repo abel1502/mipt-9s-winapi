@@ -2,6 +2,7 @@
 
 #include <abel/Error.hpp>
 #include <abel/Concurrency.hpp>
+#include <abel/RemotePtr.hpp>
 
 namespace abel {
 
@@ -275,6 +276,18 @@ DWORD Handle::get_exit_code_process() const {
     }
 
     return result;
+}
+
+OwningHandle Handle::open_process(DWORD pid, DWORD desiredAccess, bool inheritHandle) {
+    return OwningHandle(OpenProcess(desiredAccess, inheritHandle, pid)).validate();
+}
+
+RemotePtr<void> Handle::virtual_alloc(size_t size, DWORD allocationType, DWORD protect, void *address) {
+    void *result = VirtualAlloc(address, size, allocationType, protect);
+    if (!result) {
+        fail("Failed to allocate virtual memory");
+    }
+    return {*this, result};
 }
 #pragma endregion Thread
 
