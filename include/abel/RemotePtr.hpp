@@ -22,7 +22,7 @@ public:
     T read(this const auto &self) {
         T result{};
         bool success = ReadProcessMemory(
-            self.process,
+            self.process.raw(),
             self.ptr,
             &result,
             sizeof(T),
@@ -36,7 +36,7 @@ public:
 
     void write(this const auto &self, const T &value) {
         bool success = WriteProcessMemory(
-            self.process,
+            self.process.raw(),
             self.ptr,
             &value,
             sizeof(T),
@@ -87,6 +87,8 @@ protected:
     Handle process{};
     T *ptr = nullptr;
 
+    friend class _impl::NonVoidPtr<T>;
+
 public:
     RemotePtr() noexcept = default;
     RemotePtr(nullptr_t) noexcept :
@@ -99,9 +101,9 @@ public:
     RemotePtr(const RemotePtr &other) noexcept = default;
     RemotePtr &operator=(const RemotePtr &other) noexcept = default;
 
-    RemotePtr(RemotePtr &&other) noexcept {
-        std::swap(process, other.process);
-        std::swap(ptr, other.ptr);
+    RemotePtr(RemotePtr &&other) noexcept :
+        RemotePtr() {
+        *this = std::move(other);
     }
     RemotePtr &operator=(RemotePtr &&other) noexcept {
         std::swap(process, other.process);

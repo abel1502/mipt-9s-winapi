@@ -36,6 +36,10 @@ public:
         Handle stdError = nullptr,
         std::function<void(STARTUPINFOA &)> extraParams = nullptr
     );
+
+    static OwningHandle open(DWORD pid, DWORD access = PROCESS_ALL_ACCESS, bool inheritHandles = false);
+
+    static OwningHandle find(std::string_view name);
 };
 
 }  // namespace abel

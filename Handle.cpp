@@ -283,7 +283,7 @@ OwningHandle Handle::open_process(DWORD pid, DWORD desiredAccess, bool inheritHa
 }
 
 RemotePtr<void> Handle::virtual_alloc(size_t size, DWORD allocationType, DWORD protect, void *address) {
-    void *result = VirtualAlloc(address, size, allocationType, protect);
+    void *result = VirtualAllocEx(raw(), address, size, allocationType, protect);
     if (!result) {
         fail("Failed to allocate virtual memory");
     }

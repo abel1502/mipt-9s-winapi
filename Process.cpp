@@ -1,5 +1,7 @@
 #include <abel/Process.hpp>
 
+#include <Windows.h>
+#include <TlHelp32.h>
 #include <utility>
 
 #include <abel/Error.hpp>
@@ -73,6 +75,29 @@ Process Process::create(
     result.tid = processInfo.dwThreadId;
 
     return result;
+}
+
+OwningHandle Process::open(DWORD pid, DWORD access, bool inheritHandles) {
+    return OwningHandle(OpenProcess(access, inheritHandles, pid)).validate();
+}
+
+OwningHandle Process::find(std::string_view name) {
+    auto snapshot = OwningHandle(CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0));
+    PROCESSENTRY32 process{
+        .dwSize = sizeof(process)
+    };
+
+    auto wname = std::wstring(name.begin(), name.end());
+
+    if (Process32First(snapshot.raw(), &process)) {
+        do {
+            if (std::wstring_view(process.szExeFile).ends_with(wname)) {
+                return open(process.th32ProcessID);
+            }
+        } while (Process32Next(snapshot.raw(), &process));
+    }
+
+    fail("Process not found");
 }
 
 }  // namespace abel

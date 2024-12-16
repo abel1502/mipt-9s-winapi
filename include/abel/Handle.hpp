@@ -148,6 +148,10 @@ public:
         return get_exit_code_process() == STILL_ACTIVE;
     }
 
+    static Handle current_process() {
+        return Handle(GetCurrentProcess());
+    }
+
     static OwningHandle open_process(DWORD pid, DWORD desiredAccess = PROCESS_ALL_ACCESS, bool inheritHandle = false);
 
     RemotePtr<void> virtual_alloc(size_t size, DWORD allocationType = MEM_COMMIT, DWORD protect = PAGE_READWRITE, void *address = nullptr);

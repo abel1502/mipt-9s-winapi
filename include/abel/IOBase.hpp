@@ -95,6 +95,12 @@ public:
     }
 
     template <typename Self>
+    requires sync_writable<Self>
+    eof<unit> write_string(this Self &self, std::string_view str) {
+        return self.write_full_from({(const unsigned char *)str.data(), str.size()});
+    }
+
+    template <typename Self>
     requires sync_readable<Self>
     eof<std::vector<unsigned char>> read(this Self &self, size_t size, bool exact = false) {
         eof<std::vector<unsigned char>> result(std::vector<unsigned char>(size), false);
